@@ -1,4 +1,5 @@
 import cv2
+from playsound import playsound
 
 #Importando os dados para identificação dos rostos
 dadosXML_rostos = 'haarcascade_frontalface_alt2.xml'
@@ -13,6 +14,8 @@ camera = cv2.VideoCapture(0) #Inserir o ID da camera
 camera.set(3, 640)#Width
 camera.set(4, 480)#Height
 
+rostoDetectado = False
+
 #iniciando a captura da imagem pela camera
 while not cv2.waitKey(20) == ord("q"):
     #pegando a captura da imagem no instante atual, um vídeo é uma sequência de imagens.
@@ -24,13 +27,25 @@ while not cv2.waitKey(20) == ord("q"):
     #configurar para detectar o rosto
     rostos = classificador_rosto.detectMultiScale(imagem_cinza,)#definindo a imagem cinza por ser mais leve para processar
 
-    #criar um retangulo nos rostos detectados
+
+    #Rostos detectados
     for x,y,w,h in rostos:
-        cv2.rectangle(imagem_colorida,(x,y), (x + w, y +h), (0,0,255),2)
+        #cv2.rectangle(imagem_colorida,(x,y), (x + w, y +h), (0,0,255),2) #criar um retangulo nos rostos detectados
+        rostoDetectado = True
+        
 
-    #exibindo as imagens na tela
-    cv2.imshow('camera',imagem_colorida)
+    if(rostoDetectado):
+        playsound('audio.mp3')
+        break
+    
+    else:
+        #exibindo as imagens na tela
+        cv2.imshow('camera',imagem_colorida)
 
+
+while not cv2.waitKey(20) == ord("q"):
+    cv2.imshow('Meliante', imagem_colorida)
+    
 camera.release()#Encerrando a conexão com a camera
 
 
